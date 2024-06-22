@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+## Setup Defaults in macbook
+
+
 # Autohide the dock
 defaults write com.apple.dock "autohide" -bool "true" && killall Dock
 
@@ -11,3 +16,7 @@ defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist Blueto
 
 # Show sound icon
 defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist Sound -int 18
+
+# Setup tap instead of click
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
