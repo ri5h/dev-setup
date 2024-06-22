@@ -10,6 +10,8 @@ defaults write com.apple.dock "autohide" -bool "true"
 # Remove all default app icons from dock
 defaults write com.apple.dock persistent-apps -array
 
+killall Dock
+
 # Show battery percentage in menu bar
 defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist BatteryShowPercentage -bool true
 
