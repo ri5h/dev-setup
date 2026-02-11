@@ -1,0 +1,23 @@
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+    - name: "Verifying playbook requirements"
+      tags: ["always"]
+      block:
+        - name: Verify Ansible version.
+          assert:
+            that: "ansible_version.full is version_compare('2.13.0', '>=')"
+            msg: "You must update Ansible to at least 2.13.0 to use this playbook."
+        - name: Verify target system is running Windows.
+          assert:
+            that: "ansible_os_family == 'Windows' or ansible_system == 'Win32NT'"
+            msg: "The target system is not running Windows."
+          ignore_errors: true  # localhost detection can be tricky on Windows
+
+  tasks:
+    - name: "Install Browsers"
+      include_tasks: tasks/browsers.yml
+
+    - name: "Install Coding Tools"
+      include_tasks: tasks/coding.yml

@@ -1,0 +1,11 @@
+- name: Check if VS Code is installed
+  ansible.windows.win_shell: |
+    winget list --id Microsoft.VisualStudioCode --exact --source winget
+  register: vscode_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install Visual Studio Code
+  ansible.windows.win_shell: |
+    winget install --id Microsoft.VisualStudioCode --exact --source winget --accept-package-agreements --accept-source-agreements
+  when: vscode_check.rc != 0 or 'Microsoft.VisualStudioCode' not in vscode_check.stdout

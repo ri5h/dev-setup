@@ -1,0 +1,23 @@
+- name: Check if Google Chrome is installed
+  ansible.windows.win_shell: |
+    winget list --id Google.Chrome --exact --source winget
+  register: chrome_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install Google Chrome
+  ansible.windows.win_shell: |
+    winget install --id Google.Chrome --exact --source winget --accept-package-agreements --accept-source-agreements
+  when: chrome_check.rc != 0 or 'Google.Chrome' not in chrome_check.stdout
+
+- name: Check if Brave Browser is installed
+  ansible.windows.win_shell: |
+    winget list --id Brave.Brave --exact --source winget
+  register: brave_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install Brave Browser
+  ansible.windows.win_shell: |
+    winget install --id Brave.Brave --exact --source winget --accept-package-agreements --accept-source-agreements
+  when: brave_check.rc != 0 or 'Brave.Brave' not in brave_check.stdout
