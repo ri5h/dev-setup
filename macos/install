@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Setup Homebrew
+
+if ! type brew > /dev/null 2>&1; then
+  echo "Installing Homebrew..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  echo "you already have brew installed"
+  brew doctor
+fi
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
+
+(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/purohitr/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+brew install ansible
+
+echo "All packages installed."

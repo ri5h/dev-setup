@@ -1,0 +1,40 @@
+- name: Install jetbrains toolbox
+  community.general.homebrew_cask:
+    name: jetbrains-toolbox
+
+- name: Install vscode
+  community.general.homebrew_cask:
+    name: visual-studio-code
+
+- name: Install iterm2
+  community.general.homebrew_cask:
+    name: iterm2
+
+- name: Install Postman
+  community.general.homebrew_cask:
+    name: postman
+
+
+- name: Install Docker
+  community.general.homebrew_cask:
+    name: docker
+
+- name: Check if oh my zsh exists
+  ansible.builtin.shell: (ls /Users/purohitr/.oh-my-zsh >> /dev/null 2>&1 && echo exists) || echo nope
+  register: zsh_exists
+
+- name: Install oh my zsh
+  when: zsh_exists.stdout.find('nope') != -1
+  ansible.builtin.shell:
+    cmd: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+- name : Install Postman agent
+  community.general.homebrew_cask:
+    name: postman-agent
+
+- name: Install Terraform
+  community.general.homebrew:
+    name: terraform
+
+    # Notes after ohmyzsh
+    # add profile to iterm, change font size, add color presets, set color preset

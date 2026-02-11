@@ -1,0 +1,10 @@
+- name : Clone repositories needed for work
+  git:
+    repo: git@github.com:BAHAG/{{ item }}.git
+    dest: /Users/purohitr/work/{{ item }}
+  loop:
+     - dis-cms-strapi
+     - dis-cms-bloomreach
+     - api-content-delivery
+     - sf-storybook
+     - dc-appshell

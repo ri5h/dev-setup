@@ -1,0 +1,19 @@
+- name: Install brave browser
+  community.general.homebrew_cask:
+    name: brave-browser
+    state: present
+
+- name: Install firefox developer edition   
+  community.general.homebrew_cask:
+    name: firefox@developer-edition
+    state: present
+
+- name: Check if chrome exists
+  ansible.builtin.shell: (ls /Applications/Google\ Chrome.app >> /dev/null 2>&1 && echo exists) || echo nope
+  register: chrome_exists
+
+- name: Install Google chrome
+  when: chrome_exists.stdout.find('nope') != -1
+  community.general.homebrew_cask:
+    name: google-chrome
+    state: present

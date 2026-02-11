@@ -1,0 +1,21 @@
+- name: Install karabiner
+  community.general.homebrew_cask:
+    name: karabiner-elements
+    state: present
+
+- name: Install 1password
+  community.general.homebrew_cask:
+    name: 1password
+
+- name: Install raycast
+  community.general.homebrew_cask:
+    name: raycast
+
+
+- name: Install anydesk
+  community.general.homebrew_cask:
+    name: anydesk
+
+- name: Install Neovim
+  community.general.homebrew:
+    name: neovim
