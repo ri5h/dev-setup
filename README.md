@@ -26,4 +26,4 @@ curl https://raw.githubusercontent.com/ri5h/dev-setup/main/brew.sh
 Re-run `ansible-playbook bootstrap.yml` anytime to ensure all tools are installed.
 
 
-Needed to do ssh setup in 1password and github 
+Needed to do ssh setup in 1password and github

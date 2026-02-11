@@ -2,7 +2,7 @@
 <#
     Bootstrap script for Windows: installs Git and Ansible so you can clone this repo
     and run Ansible playbooks for the rest of the setup.
-    
+
     Usage:
       1. Run this script in an elevated PowerShell to get Git + Ansible
       2. Clone this repo: git clone https://github.com/ri5h/dev-setup.git
@@ -34,7 +34,7 @@ function Install-WingetPackage {
         [Parameter(Mandatory = $true)]
         [string]$Id
     )
-    
+
     if (Test-PackageInstalled -Id $Id) {
         Write-Host "✔ $Name already installed." -ForegroundColor Green
         return
