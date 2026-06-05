@@ -8,7 +8,7 @@
 
     - name: Verify target system is Ubuntu.
       assert:
-        that: ansible_distribution == 'Ubuntu'
+        that: ansible_facts['distribution'] == 'Ubuntu'
         msg: The target system is not running Ubuntu.
 
   tasks:

@@ -6,12 +6,12 @@
     state: present
 
 - name: Ensure zsh is the default shell for this user
-  become: true
   ansible.builtin.shell: |
-    if [ "$(basename "$SHELL")" != "zsh" ]; then
+    if [ "$(basename "${SHELL:-}")" != "zsh" ] && command -v chsh >/dev/null 2>&1; then
       chsh -s "$(command -v zsh)" || true
     fi
   changed_when: false
+  failed_when: false
 
 - name: Make Neovim the default editor in zsh
   ansible.builtin.blockinfile:
