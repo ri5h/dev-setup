@@ -23,6 +23,7 @@
       export VISUAL=nvim
       export GIT_EDITOR=nvim
       alias vim='nvim'
+      alias vi='nvim'
 
 - name: Set Git to use Neovim as its editor
   ansible.builtin.shell: |
