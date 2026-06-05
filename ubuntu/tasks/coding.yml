@@ -5,13 +5,19 @@
       - neovim
     state: present
 
+- name: Ensure zsh is registered as a valid login shell
+  ansible.builtin.shell: |
+    if ! grep -Fxq "$(command -v zsh)" /etc/shells; then
+      command -v zsh | tee -a /etc/shells >/dev/null
+    fi
+  become: true
+  changed_when: false
+
 - name: Ensure zsh is the default shell for this user
   ansible.builtin.shell: |
-    if [ "$(basename "${SHELL:-}")" != "zsh" ] && command -v chsh >/dev/null 2>&1; then
-      chsh -s "$(command -v zsh)" || true
-    fi
+    chsh -s "$(command -v zsh)" "{{ ansible_user_id }}"
+  become: true
   changed_when: false
-  failed_when: false
 
 - name: Make Neovim the default editor in zsh
   ansible.builtin.blockinfile:
