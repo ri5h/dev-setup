@@ -1,0 +1,41 @@
+- name: Install zsh and Neovim with Homebrew
+  community.general.homebrew:
+    name:
+      - zsh
+      - neovim
+    state: present
+
+- name: Ensure zsh is the default shell for this user
+  become: true
+  ansible.builtin.shell: |
+    if [ "$(basename "$SHELL")" != "zsh" ]; then
+      chsh -s "$(command -v zsh)" || true
+    fi
+  changed_when: false
+
+- name: Make Neovim the default editor in zsh
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} dev-setup editor defaults"
+    create: true
+    block: |
+      export EDITOR=nvim
+      export VISUAL=nvim
+      export GIT_EDITOR=nvim
+      alias vim='nvim'
+
+- name: Set Git to use Neovim as its editor
+  ansible.builtin.shell: |
+    git config --global core.editor nvim
+  changed_when: false
+
+- name: Verify zsh and nvim are available
+  ansible.builtin.shell: |
+    command -v zsh
+    command -v nvim
+  register: tool_check
+  changed_when: false
+
+- name: Show installed tool paths
+  ansible.builtin.debug:
+    var: tool_check.stdout_lines

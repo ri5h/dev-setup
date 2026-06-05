@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Installing Homebrew..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  echo "Homebrew is already installed."
+fi
+
+if command -v brew >/dev/null 2>&1; then
+  eval "$(brew shellenv)"
+fi
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
+
+if ! brew list ansible >/dev/null 2>&1; then
+  echo "Installing Ansible via Homebrew..."
+  brew install ansible
+else
+  echo "Ansible is already installed."
+fi
+
+echo "Ubuntu bootstrap is ready."
+echo "Run the following from this folder:"
+echo "  ansible-playbook bootstrap.yml"
