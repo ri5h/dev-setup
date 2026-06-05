@@ -14,3 +14,5 @@
   tasks:
     - name: Configure the Ubuntu development environment
       include_tasks: tasks/coding.yml
+    - name: Run the homelab setup playbook with k3s
+      include_tasks: tasks/homelab.yml

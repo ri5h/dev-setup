@@ -43,3 +43,4 @@ Needed to do ssh setup in 1password and github
 3. cd dev-setup/ubuntu
 4. chmod +x install
 5. ./install
+6. ansible-playbook bootstrap.yml --ask-become-pass
