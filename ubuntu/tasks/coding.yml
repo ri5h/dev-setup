@@ -5,19 +5,21 @@
       - neovim
     state: present
 
-- name: Ensure zsh is registered as a valid login shell
-  ansible.builtin.shell: |
-    if ! grep -Fxq "$(command -v zsh)" /etc/shells; then
-      command -v zsh | tee -a /etc/shells >/dev/null
-    fi
-  become: true
+- name: Find homebrew zsh path
+  ansible.builtin.shell: command -v zsh
+  register: homebrew_zsh
   changed_when: false
 
-- name: Ensure zsh is the default shell for this user
-  ansible.builtin.shell: |
-    chsh -s "$(command -v zsh)" "{{ ansible_user_id }}"
-  become: true
-  changed_when: false
+- name: Ensure zsh is the default shell for this user via user profile
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.profile"
+    marker: "# {mark} dev-setup default shell fallback"
+    create: true
+    block: |
+      # If running interactively and zsh is available, switch to it
+      if [ -t 0 ] && command -v zsh >/dev/null 2>&1; then
+        exec zsh -l
+      fi
 
 - name: Make Neovim the default editor in zsh
   ansible.builtin.blockinfile:
@@ -46,3 +48,13 @@
 - name: Show installed tool paths
   ansible.builtin.debug:
     var: tool_check.stdout_lines
+
+- name: Check if oh my zsh exists
+  ansible.builtin.shell: test -d ~/.oh-my-zsh && echo exists || echo nope
+  register: zsh_exists
+  changed_when: false
+
+- name: Install oh my zsh
+  when: zsh_exists.stdout == 'nope'
+  ansible.builtin.shell:
+    cmd: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -- --unattended

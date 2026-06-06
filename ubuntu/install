@@ -2,21 +2,26 @@
 
 set -euo pipefail
 
+# 1. Install Homebrew if missing
 if ! command -v brew >/dev/null 2>&1; then
   echo "Installing Homebrew..."
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  
+  # Crucial: Load Homebrew into the current script session right after install
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 else
   echo "Homebrew is already installed."
 fi
 
-if command -v brew >/dev/null 2>&1; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
-  eval "$(brew shellenv)"
+# 2. Ensure Homebrew environment is loaded (for subsequent script runs)
+if command -v /home/linuxbrew/.linuxbrew/bin/brew >/dev/null 2>&1; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_UPGRADE=1
 
+# 3. Install Ansible
 if ! brew list ansible >/dev/null 2>&1; then
   echo "Installing Ansible via Homebrew..."
   brew install ansible
@@ -26,4 +31,4 @@ fi
 
 echo "Ubuntu bootstrap is ready."
 echo "Run the following from this folder:"
-echo "  ansible-playbook bootstrap.yml"
+echo "   ansible-playbook bootstrap.yml"
