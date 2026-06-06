@@ -1,27 +1,12 @@
 - name: Ensure k3s is installed
-  become: true
-  # We tell 1Password to completely step out of the way for this task
-  environment:
-    ONEPASSWORD_NO_BIOMETRIC: "1"
-    SUDO_ASKPASS: ""
-  vars:
-    ansible_become_flags: '-H -S -p "Password:"'
   ansible.builtin.shell: |
     if ! command -v k3s >/dev/null 2>&1; then
-      echo "k3s not found; installing it now..."
-      curl -sfL https://get.k3s.io | sh -
-    else
-      echo "k3s is already installed at $(command -v k3s)"
+      curl -sfL https://get.k3s.io | sudo sh -
     fi
   changed_when: false
 
 - name: Verify the k3s cluster is reachable
   become: true
-  environment:
-    ONEPASSWORD_NO_BIOMETRIC: "1"
-    SUDO_ASKPASS: ""
-  vars:
-    ansible_become_flags: '-H -S -p "Password:"'
   ansible.builtin.shell: |
     k3s kubectl get node
   register: k3s_node_check
