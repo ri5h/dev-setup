@@ -1,13 +1,17 @@
 - name: Ensure k3s is installed
+  become: true
   ansible.builtin.shell: |
     if ! command -v k3s >/dev/null 2>&1; then
-      curl -sfL https://get.k3s.io | sudo sh -
+      curl -sfL https://get.k3s.io | sh -
     fi
-  changed_when: false
+  args:
+    executable: /bin/bash
+  register: k3s_install
+  changed_when: "'Installing k3s' in k3s_install.stdout"
 
 - name: Verify the k3s cluster is reachable
   become: true
-  ansible.builtin.shell: |
-    k3s kubectl get node
+  ansible.builtin.command:
+    cmd: k3s kubectl get node
   register: k3s_node_check
   changed_when: false
